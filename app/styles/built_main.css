@@ -584,6 +584,32 @@ video {
   padding: 0.5rem;
 }
 
+.font-isx {
+  font-family: IranSansX, sans-serif;
+}
+
+@font-face {
+  font-family: IRANSansX;
+
+  font-style: normal;
+
+  font-weight: 700;
+
+  src: url('/IRANSansX-Bold.woff') format('woff'),   
+	url('/IRANSansX-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: IRANSansX;
+
+  font-style: normal;
+
+  font-weight: 400;
+
+  src: url('/IRANSansX-Regular.woff') format('woff'),   
+	url('/IRANSansX-Regular.woff2') format('woff2');
+}
+
 html {
   scroll-behavior: smooth;
 }

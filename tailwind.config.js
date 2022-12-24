@@ -8,6 +8,9 @@ module.exports = {
       colors: {
         shano: "#1E90FF",
       },
+      fontFamily: {
+        isx: "IranSansX, sans-serif",
+      },
     },
   },
   plugins: [],
