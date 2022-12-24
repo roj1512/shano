@@ -4,7 +4,7 @@ export default function Shano() {
       viewBox="0 0 100 100"
       width="25"
       height="25"
-      className="fill-black dark:fill-white"
+      className="fill-ourblack dark:fill-white"
     >
       <path
         fillRule="evenodd"

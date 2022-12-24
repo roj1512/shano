@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         shano: "#1E90FF",
+        ourblack: "#131313",
       },
       fontFamily: {
         isx: "IranSansX, sans-serif",
