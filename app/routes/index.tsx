@@ -179,10 +179,18 @@ export default function Index() {
         </>
       )}
       {!loading && result && (
-        <div className="w-full flex-grow">
+        <div className="w-full flex-grow h-full flex flex-col justify-between">
           <Typing>
             {result}
           </Typing>
+          <div className="flex w-full justify-end">
+            <button
+              onClick={() => setResult("")}
+              className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+            >
+              بگەڕێوە
+            </button>
+          </div>
         </div>
       )}
     </main>
