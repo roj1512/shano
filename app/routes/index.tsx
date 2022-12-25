@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { FaCircleNotch, FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
-import Header from "~/components/Header";
 import Typing from "~/components/Typing";
-import { useLoader } from "~/contexts/loader";
+import { useHeader } from "~/contexts/header";
 
 enum Status {
   None,
@@ -13,7 +12,7 @@ enum Status {
 
 export default function Index() {
   const [status, setStatus] = useState(Status.None);
-  const [loading, setLoading] = useLoader();
+  const { logoAnimated, setLogoAnimated } = useHeader();
 
   return (
     <main className="w-full max-w-3xl mx-auto p-2 flex flex-col gap-2 items-center justify-center flex-grow">
@@ -28,7 +27,7 @@ export default function Index() {
                   // const stream = await navigator.mediaDevices.getUserMedia({
                   //   audio: true,
                   // });
-                  setLoading(true);
+                  setLogoAnimated(true);
                   setStatus(Status.Recording);
                 }}
                 className="rounded-full px-4 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
@@ -53,7 +52,7 @@ export default function Index() {
           <div>
             <button
               onClick={async () => {
-                setLoading(false);
+                setLogoAnimated(false);
                 setStatus(Status.Uploading);
               }}
               className="rounded-full px-4 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
