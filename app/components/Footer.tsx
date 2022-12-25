@@ -7,7 +7,7 @@ export default function Footer() {
         </p>
         <a
           href="https://github.com/roj1512/shano"
-          className="text-shano hover:opacity-50 duration-100"
+          className="duration-100 opacity-50 hover:opacity-100"
           target="_blank"
           rel="noreferrer"
         >
