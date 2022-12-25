@@ -48,7 +48,8 @@ export default function Index() {
     data.append("BeamSize", "50");
     data.append("audioFile", new Blob([output]));
     const res = await fetch(
-      "https://dc91-31-208-75-248.eu.ngrok.io/upload",
+      // @ts-expect-error
+      new URL("/upload", window.env.API_URL),
       {
         method: "POST",
         body: data,
