@@ -9,7 +9,14 @@ import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import Typing from "~/components/Typing";
 import { useHeader } from "~/contexts/header";
 
-const supportedMimeTypes = ["audio/mp3", "audio/ogg", "audio/x-wav"];
+const supportedMimeTypes = [
+  "audio/mp3",
+  "audio/ogg",
+  "audio/x-wav",
+  "video/ogg",
+  "audio/mp4",
+  "video/mp4",
+];
 
 export default function Index() {
   const { setLogoAnimated, setText } = useHeader();
