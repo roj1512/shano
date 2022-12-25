@@ -21,7 +21,7 @@ const supportedMimeTypes = [
 ];
 
 export default function Index() {
-  const { setLogoAnimated, setText } = useHeader();
+  const { setLogoAnimated, setText, setButton } = useHeader();
   const [loading, setLoading] = useState(false);
   const [recording, setRecording] = useState(false);
   const [loadingText, setLoadingText] = useState("");
@@ -69,6 +69,17 @@ export default function Index() {
     if (res.status == 200) {
       const data = await res.json();
       setResult(data[0]["transcription"]);
+      setButton(
+        <button
+          onClick={() => {
+            setResult("");
+            setButton(null);
+          }}
+          className="duration-100 rounded-full text-sm px-4 py-1 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+        >
+          بگەڕێوە
+        </button>,
+      );
       setLoadingText("");
       setLoading(false);
     }
@@ -91,108 +102,102 @@ export default function Index() {
   }, []);
 
   return (
-    <main className="w-full max-w-3xl mx-auto p-3 flex flex-col gap-2 items-center justify-center flex-grow">
-      {!loading && !result && (
-        <div className="flex flex-col items-center gap-2">
-          {!recording && (
-            <div className="flex-grow w-full">
-              <label className="cursor-pointer duration-100 rounded-full w-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5">
-                <input
-                  type="file"
-                  accept={supportedMimeTypes.join(", ")}
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file && supportedMimeTypes.includes(file.type)) {
-                      await process(file);
-                    }
-                  }}
-                  hidden
-                />
-                <FaFileAudio size={16} />
-                فایلێکی دەنگ هەڵبژێرە
-              </label>
+    <main className="flex-grow p-3">
+      <div className="w-full max-w-3xl mx-auto flex flex-col gap-2 items-center justify-center h-full">
+        {!loading && !result && (
+          <div className="flex flex-col items-center gap-2">
+            {!recording && (
+              <div className="flex-grow w-full">
+                <label className="cursor-pointer duration-100 rounded-full w-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5">
+                  <input
+                    type="file"
+                    accept={supportedMimeTypes.join(", ")}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file && supportedMimeTypes.includes(file.type)) {
+                        await process(file);
+                      }
+                    }}
+                    hidden
+                  />
+                  <FaFileAudio size={16} />
+                  فایلێکی دەنگ هەڵبژێرە
+                </label>
+              </div>
+            )}
+            <div>
+              {recording
+                ? (
+                  <button
+                    onClick={() => recorder?.stop()}
+                    className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+                  >
+                    <FaMicrophoneSlash size={16} /> تۆمارکردن ڕاوەستێنە
+                  </button>
+                )
+                : (
+                  <button
+                    onClick={async () => {
+                      if (audioDeviceNotAvailable) {
+                        setAlert({
+                          title: "تۆمارکردن بەردەست نییە",
+                          body: "لەوانەیە ڕێت نەدابێت مایکەکەت بەکار بێت.",
+                        });
+                        return;
+                      }
+                      let stream: MediaStream;
+                      try {
+                        stream = await navigator.mediaDevices.getUserMedia({
+                          audio: true,
+                        });
+                      } catch (err) {
+                        setAudioDeviceNotAvailable(true);
+                        return;
+                      }
+                      const recorder = new MediaRecorder(stream, {
+                        audioBitsPerSecond: 16_000,
+                      });
+                      setRecorder(recorder);
+                      const blobs = new Array<Blob>();
+                      recorder.ondataavailable = (e) => {
+                        blobs.push(e.data);
+                      };
+                      recorder.onstop = () => {
+                        setText(null);
+                        setLogoAnimated(false);
+                        setRecording(false);
+                        stream.getAudioTracks()[0].enabled = false;
+                        return process(new Blob(blobs));
+                      };
+                      recorder.start();
+                      setText("تۆمار دەکرێت");
+                      setLogoAnimated(true);
+                      setRecording(true);
+                    }}
+                    className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+                  >
+                    <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
+                  </button>
+                )}
             </div>
-          )}
-          <div>
-            {recording
-              ? (
-                <button
-                  onClick={() => recorder?.stop()}
-                  className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
-                >
-                  <FaMicrophoneSlash size={16} /> تۆمارکردن ڕاوەستێنە
-                </button>
-              )
-              : (
-                <button
-                  onClick={async () => {
-                    if (audioDeviceNotAvailable) {
-                      setAlert({
-                        title: "تۆمارکردن بەردەست نییە",
-                        body: "لەوانەیە ڕێت نەدابێت مایکەکەت بەکار بێت.",
-                      });
-                      return;
-                    }
-                    let stream: MediaStream;
-                    try {
-                      stream = await navigator.mediaDevices.getUserMedia({
-                        audio: true,
-                      });
-                    } catch (err) {
-                      setAudioDeviceNotAvailable(true);
-                      return;
-                    }
-                    const recorder = new MediaRecorder(stream, {
-                      audioBitsPerSecond: 16_000,
-                    });
-                    setRecorder(recorder);
-                    const blobs = new Array<Blob>();
-                    recorder.ondataavailable = (e) => {
-                      blobs.push(e.data);
-                    };
-                    recorder.onstop = () => {
-                      setText(null);
-                      setLogoAnimated(false);
-                      setRecording(false);
-                      stream.getAudioTracks()[0].enabled = false;
-                      return process(new Blob(blobs));
-                    };
-                    recorder.start();
-                    setText("تۆمار دەکرێت");
-                    setLogoAnimated(true);
-                    setRecording(true);
-                  }}
-                  className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
-                >
-                  <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
-                </button>
-              )}
           </div>
-        </div>
-      )}
-      {loading && (
-        <>
-          <div className="flex gap-2 items-center justify-center text-xl">
-            <FaCircleNotch size={20} className="animate-spin" />
-            {loadingText}
+        )}
+        {loading && (
+          <>
+            <div className="flex gap-2 items-center justify-center text-xl">
+              <FaCircleNotch size={20} className="animate-spin" />
+              {loadingText}
+            </div>
+          </>
+        )}
+        {!loading && result && (
+          <div className="w-full flex-grow">
+            <Typing>
+              {result}
+            </Typing>
           </div>
-        </>
-      )}
-      {!loading && result && (
-        <div className="w-full flex-grow h-full flex flex-col justify-between">
-          <Typing>
-            {result}
-          </Typing>
-          <div className="flex w-full justify-end">
-            <button
-              onClick={() => setResult("")}
-              className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
-            >
-              بگەڕێوە
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </main>
   );
 }
