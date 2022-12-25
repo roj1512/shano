@@ -12,7 +12,7 @@ enum Status {
 
 export default function Index() {
   const [status, setStatus] = useState(Status.None);
-  const { logoAnimated, setLogoAnimated } = useHeader();
+  const { setLogoAnimated } = useHeader();
 
   return (
     <main className="w-full max-w-3xl mx-auto p-2 flex flex-col gap-2 items-center justify-center flex-grow">
@@ -27,6 +27,15 @@ export default function Index() {
                   // const stream = await navigator.mediaDevices.getUserMedia({
                   //   audio: true,
                   // });
+                  // const recorder = new MediaRecorder(stream, {
+                  //   audioBitsPerSecond: 16_000,
+                  // });
+                  // recorder.ondataavailable = (e) => {
+                  //   console.log(URL.createObjectURL(e.data));
+                  // };
+                  // recorder.start();
+                  // await new Promise((r) => setTimeout(r, 5000));
+                  // recorder.stop();
                   setLogoAnimated(true);
                   setStatus(Status.Recording);
                 }}
@@ -62,7 +71,7 @@ export default function Index() {
           </div>
         ),
         [Status.Result]: (
-          <div className="w-full">
+          <div className="w-full flex-grow p-3">
             <Typing>
               .
             </Typing>
