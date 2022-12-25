@@ -13,6 +13,7 @@ const supportedMimeTypes = [
   "audio/mp3",
   "audio/ogg",
   "audio/x-wav",
+  "audio/wav",
   "video/ogg",
   "audio/mp4",
   "video/mp4",
