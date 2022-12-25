@@ -75,7 +75,7 @@ export default function Index() {
             setResult("");
             setButton(null);
           }}
-          className="duration-100 rounded-full text-sm px-4 py-1 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+          className="button-sm"
         >
           بگەڕێوە
         </button>,
@@ -106,31 +106,12 @@ export default function Index() {
       <div className="w-full max-w-3xl mx-auto flex flex-col gap-2 items-center justify-center h-full">
         {!loading && !result && (
           <div className="flex flex-col items-center gap-2">
-            {!recording && (
-              <div className="flex-grow w-full">
-                <label className="cursor-pointer duration-100 rounded-full w-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5">
-                  <input
-                    type="file"
-                    accept={supportedMimeTypes.join(", ")}
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      if (file && supportedMimeTypes.includes(file.type)) {
-                        await process(file);
-                      }
-                    }}
-                    hidden
-                  />
-                  <FaFileAudio size={16} />
-                  فایلێکی دەنگ هەڵبژێرە
-                </label>
-              </div>
-            )}
             <div>
               {recording
                 ? (
                   <button
                     onClick={() => recorder?.stop()}
-                    className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+                    className="duration-100 rounded-full min-h-[40px] px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
                   >
                     <FaMicrophoneSlash size={16} /> تۆمارکردن ڕاوەستێنە
                   </button>
@@ -174,12 +155,31 @@ export default function Index() {
                       setLogoAnimated(true);
                       setRecording(true);
                     }}
-                    className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+                    className="button"
                   >
                     <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
                   </button>
                 )}
             </div>
+            {!recording && (
+              <div className="flex-grow w-full">
+                <label className="button">
+                  <input
+                    type="file"
+                    accept={supportedMimeTypes.join(", ")}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file && supportedMimeTypes.includes(file.type)) {
+                        await process(file);
+                      }
+                    }}
+                    hidden
+                  />
+                  <FaFileAudio size={16} />
+                  فایلێکی دەنگ هەڵبژێرە
+                </label>
+              </div>
+            )}
           </div>
         )}
         {loading && (
