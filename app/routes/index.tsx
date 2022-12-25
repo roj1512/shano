@@ -25,6 +25,7 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
   const [recording, setRecording] = useState(false);
   const [loadingText, setLoadingText] = useState("");
+  const [loadingNote, setLoadingNote] = useState("");
   const [result, setResult] = useState("");
   const [audioDeviceNotAvailable, setAudioDeviceNotAvailable] = useState(false);
   const [recorder, setRecorder] = useState<MediaRecorder>();
@@ -37,7 +38,9 @@ export default function Index() {
     });
     setLoading(true);
     setLoadingText("FFmpeg دادەمەزرێنرێت...");
+    setLoadingNote("کەمێکی پێ دەچێت بۆ یەکەم جار.");
     await ffmpeg.load();
+    setLoadingNote("");
     setLoadingText("کار لەسەر دەنگەکەت دەکرێت...");
     ffmpeg.FS(
       "writeFile",
@@ -111,7 +114,7 @@ export default function Index() {
                 ? (
                   <button
                     onClick={() => recorder?.stop()}
-                    className="duration-100 rounded-full min-h-[40px] px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+                    className="button min-h-[40px]"
                   >
                     <FaMicrophoneSlash size={16} /> تۆمارکردن ڕاوەستێنە
                   </button>
@@ -188,6 +191,9 @@ export default function Index() {
               <FaCircleNotch size={20} className="animate-spin" />
               {loadingText}
             </div>
+            <p className="opacity-50 text-sm">
+              {loadingNote}
+            </p>
           </>
         )}
         {!loading && result && (
