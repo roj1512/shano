@@ -24,6 +24,7 @@ export default function Index() {
   const [recording, setRecording] = useState(false);
   const [loadingText, setLoadingText] = useState("");
   const [result, setResult] = useState("");
+  const [audioDeviceNotAvailable, setAudioDeviceNotAvailable] = useState(false);
   const [recorder, setRecorder] = useState<MediaRecorder>();
 
   async function process(file: Blob | File) {
@@ -122,9 +123,15 @@ export default function Index() {
               : (
                 <button
                   onClick={async () => {
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                      audio: true,
-                    });
+                    let stream: MediaStream;
+                    try {
+                      stream = await navigator.mediaDevices.getUserMedia({
+                        audio: true,
+                      });
+                    } catch (err) {
+                      setAudioDeviceNotAvailable(true);
+                      return;
+                    }
                     const recorder = new MediaRecorder(stream, {
                       audioBitsPerSecond: 16_000,
                     });
@@ -145,7 +152,8 @@ export default function Index() {
                     setLogoAnimated(true);
                     setRecording(true);
                   }}
-                  className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+                  disabled={audioDeviceNotAvailable}
+                  className="duration-100 rounded-full disabled:cursor-not-allowed px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] disabled:opacity-75 enabled:hover:bg-[rgba(0,0,0,0.15)] enabled:dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
                 >
                   <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
                 </button>
