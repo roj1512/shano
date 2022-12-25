@@ -2,10 +2,10 @@ import { createContext, useContext } from "react";
 
 const context = createContext<
   [
-    string | null,
-    React.Dispatch<React.SetStateAction<string|null>>,
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>,
   ]
->([null, () => {}]);
+>([false, () => {}]);
 
 export const useLoader = () => useContext(context);
 
