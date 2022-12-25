@@ -4,8 +4,15 @@ const context = createContext<
   {
     logoAnimated: boolean;
     setLogoAnimated: React.Dispatch<React.SetStateAction<boolean>>;
+    text: string | null;
+    setText: React.Dispatch<React.SetStateAction<string | null>>;
   }
->({ logoAnimated: false, setLogoAnimated: () => {} });
+>({
+  logoAnimated: false,
+  setLogoAnimated: () => {},
+  text: null,
+  setText: () => {},
+});
 
 export const useHeader = () => useContext(context);
 
