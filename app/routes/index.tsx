@@ -8,6 +8,7 @@ import {
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import Typing from "~/components/Typing";
 import { useHeader } from "~/contexts/header";
+import { useAlert } from "~/contexts/alert";
 
 const supportedMimeTypes = [
   "audio/mp3",
@@ -27,6 +28,7 @@ export default function Index() {
   const [result, setResult] = useState("");
   const [audioDeviceNotAvailable, setAudioDeviceNotAvailable] = useState(false);
   const [recorder, setRecorder] = useState<MediaRecorder>();
+  const [, setAlert] = useAlert();
 
   async function process(file: Blob | File) {
     const ffmpeg = createFFmpeg({
@@ -124,6 +126,13 @@ export default function Index() {
               : (
                 <button
                   onClick={async () => {
+                    if (audioDeviceNotAvailable) {
+                      setAlert({
+                        title: "تۆمارکردن بەردەست نییە",
+                        body: "لەوانەیە ڕێت نەدابێت مایکەکەت بەکار بێت.",
+                      });
+                      return;
+                    }
                     let stream: MediaStream;
                     try {
                       stream = await navigator.mediaDevices.getUserMedia({
@@ -153,8 +162,7 @@ export default function Index() {
                     setLogoAnimated(true);
                     setRecording(true);
                   }}
-                  disabled={audioDeviceNotAvailable}
-                  className="duration-100 rounded-full disabled:cursor-not-allowed px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] disabled:opacity-75 enabled:hover:bg-[rgba(0,0,0,0.15)] enabled:dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
+                  className="duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(0,0,0,0.15)] dark:hover:bg-[rgba(255,255,255,0.15)] flex items-center justify-center gap-1.5"
                 >
                   <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
                 </button>
