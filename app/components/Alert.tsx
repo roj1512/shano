@@ -18,10 +18,7 @@ export default function Alert() {
       in={visible}
       timeout={100}
       unmountOnExit={true}
-      onExited={() => {
-        setAlert(null);
-        console.log("alertset");
-      }}
+      onExited={() => setAlert(null)}
     >
       {(state) => (
         <div

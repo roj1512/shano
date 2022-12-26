@@ -9,6 +9,8 @@ import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import Typing from "~/components/Typing";
 import { useHeader } from "~/contexts/header";
 import { useAlert } from "~/contexts/alert";
+import { SwitchTransition, Transition } from "react-transition-group";
+import { commonTransitionClasses } from "~/constants";
 
 const supportedMimeTypes = [
   "audio/mp3",
@@ -106,104 +108,133 @@ export default function Index() {
 
   return (
     <main className="flex-grow p-3">
-      <div className="w-full max-w-3xl mx-auto flex flex-col gap-2 items-center justify-center h-full">
-        {!loading && result == null && (
-          <div className="flex flex-col items-center gap-2">
-            <div>
-              {recording
+      <SwitchTransition>
+        <Transition
+          timeout={100}
+          key={[recording, loading, loadingText, result == null].join("")}
+          unmountOnExit
+          mountOnEnter
+        >
+          {(state) => (
+            <div
+              className={`w-full max-w-3xl mx-auto flex flex-col gap-2 items-center justify-center h-full duration-100 ${
+                commonTransitionClasses[state]
+              }`}
+            >
+              {loading
                 ? (
-                  <button
-                    onClick={() => recorder?.stop()}
-                    className="button min-h-[40px]"
-                  >
-                    <FaMicrophoneSlash size={16} /> تۆمارکردن ڕاوەستێنە
-                  </button>
+                  <>
+                    <div className="flex gap-2 items-center justify-center text-xl">
+                      <FaCircleNotch size={20} className="animate-spin" />
+                      {loadingText}
+                    </div>
+                    <p className="opacity-50 text-sm">
+                      {loadingNote}
+                    </p>
+                  </>
+                )
+                : result != null
+                ? (
+                  <div className="w-full flex-grow select-text">
+                    <Typing>
+                      {result || "\u2014"}
+                    </Typing>
+                  </div>
                 )
                 : (
-                  <button
-                    onClick={async () => {
-                      if (audioDeviceNotAvailable) {
-                        setAlert({
-                          title: "تۆمارکردن بەردەست نییە",
-                          body: "لەوانەیە ڕێت نەدابێت مایکەکەت بەکار بێت.",
-                        });
-                        return;
-                      }
-                      let stream: MediaStream;
-                      try {
-                        stream = await navigator.mediaDevices.getUserMedia({
-                          audio: true,
-                        });
-                      } catch (err) {
-                        setAudioDeviceNotAvailable(true);
-                        return;
-                      }
-                      const recorder = new MediaRecorder(stream, {
-                        audioBitsPerSecond: 16_000,
-                      });
-                      setRecorder(recorder);
-                      const blobs = new Array<Blob>();
-                      recorder.ondataavailable = (e) => {
-                        blobs.push(e.data);
-                      };
-                      recorder.onstop = () => {
-                        setText(null);
-                        setLogoAnimated(false);
-                        setRecording(false);
-                        stream.getAudioTracks()[0].enabled = false;
-                        return process(new Blob(blobs));
-                      };
-                      recorder.start();
-                      setText("تۆمار دەکرێت");
-                      setLogoAnimated(true);
-                      setRecording(true);
-                    }}
-                    className="button"
+                  <div
+                    className={`flex flex-col items-center gap-2 duration-100 ${
+                      commonTransitionClasses[state]
+                    }`}
                   >
-                    <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
-                  </button>
+                    {recording
+                      ? (
+                        <button
+                          onClick={() => recorder?.stop()}
+                          className="button min-h-[40px]"
+                        >
+                          <FaMicrophoneSlash size={16} /> تۆمارکردن ڕاوەستێنە
+                        </button>
+                      )
+                      : (
+                        <>
+                          <button
+                            onClick={async () => {
+                              if (audioDeviceNotAvailable) {
+                                setAlert({
+                                  title: "تۆمارکردن بەردەست نییە",
+                                  body:
+                                    "لەوانەیە ڕێت نەدابێت مایکەکەت بەکار بێت.",
+                                });
+                                return;
+                              }
+                              let stream: MediaStream;
+                              try {
+                                stream = await navigator.mediaDevices
+                                  .getUserMedia({
+                                    audio: true,
+                                  });
+                              } catch (err) {
+                                setAudioDeviceNotAvailable(true);
+                                return;
+                              }
+                              const recorder = new MediaRecorder(
+                                stream,
+                                {
+                                  audioBitsPerSecond: 16_000,
+                                },
+                              );
+                              setRecorder(recorder);
+                              const blobs = new Array<Blob>();
+                              recorder.ondataavailable = (e) => {
+                                blobs.push(e.data);
+                              };
+                              recorder.onstop = () => {
+                                setText(null);
+                                setLogoAnimated(false);
+                                setRecording(false);
+                                stream.getAudioTracks()[0].enabled = false;
+                                return process(new Blob(blobs));
+                              };
+                              recorder.start();
+                              setText("تۆمار دەکرێت");
+                              setLogoAnimated(true);
+                              setRecording(true);
+                            }}
+                            className="button"
+                          >
+                            <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
+                          </button>
+                          <div className="flex-grow w-full">
+                            <label className="button">
+                              <input
+                                type="file"
+                                accept={supportedMimeTypes.join(", ")}
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (
+                                    file &&
+                                    supportedMimeTypes.includes(
+                                      file.type,
+                                    )
+                                  ) {
+                                    await process(file);
+                                  }
+                                }}
+                                hidden
+                              />
+                              <FaFileAudio size={16} />
+                              فایلێکی دەنگ هەڵبژێرە
+                            </label>
+                          </div>
+                        </>
+                      )}
+                  </div>
                 )}
             </div>
-            {!recording && (
-              <div className="flex-grow w-full">
-                <label className="button">
-                  <input
-                    type="file"
-                    accept={supportedMimeTypes.join(", ")}
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      if (file && supportedMimeTypes.includes(file.type)) {
-                        await process(file);
-                      }
-                    }}
-                    hidden
-                  />
-                  <FaFileAudio size={16} />
-                  فایلێکی دەنگ هەڵبژێرە
-                </label>
-              </div>
-            )}
-          </div>
-        )}
-        {loading && (
-          <>
-            <div className="flex gap-2 items-center justify-center text-xl">
-              <FaCircleNotch size={20} className="animate-spin" />
-              {loadingText}
-            </div>
-            <p className="opacity-50 text-sm">
-              {loadingNote}
-            </p>
-          </>
-        )}
-        {!loading && result != null && (
-          <div className="w-full flex-grow select-text">
-            <Typing>
-              {result || "\u2014"}
-            </Typing>
-          </div>
-        )}
-      </div>
+          )}
+        </Transition>
+      </SwitchTransition>
     </main>
   );
 }
