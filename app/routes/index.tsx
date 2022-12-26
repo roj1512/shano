@@ -24,9 +24,9 @@ export default function Index() {
   const { setLogoAnimated, setText, setButton } = useHeader();
   const [loading, setLoading] = useState(false);
   const [recording, setRecording] = useState(false);
-  const [loadingText, setLoadingText] = useState("");
-  const [loadingNote, setLoadingNote] = useState("");
-  const [result, setResult] = useState("");
+  const [loadingText, setLoadingText] = useState<string | null>(null);
+  const [loadingNote, setLoadingNote] = useState<string | null>(null);
+  const [result, setResult] = useState<string | null>(null);
   const [audioDeviceNotAvailable, setAudioDeviceNotAvailable] = useState(false);
   const [recorder, setRecorder] = useState<MediaRecorder>();
   const [, setAlert] = useAlert();
@@ -107,7 +107,7 @@ export default function Index() {
   return (
     <main className="flex-grow p-3">
       <div className="w-full max-w-3xl mx-auto flex flex-col gap-2 items-center justify-center h-full">
-        {!loading && !result && (
+        {!loading && result == null && (
           <div className="flex flex-col items-center gap-2">
             <div>
               {recording
@@ -196,10 +196,10 @@ export default function Index() {
             </p>
           </>
         )}
-        {!loading && result && (
+        {!loading && result != null && (
           <div className="w-full flex-grow">
             <Typing>
-              {result}
+              {result || "\u2014"}
             </Typing>
           </div>
         )}
