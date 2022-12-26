@@ -197,7 +197,7 @@ export default function Index() {
           </>
         )}
         {!loading && result != null && (
-          <div className="w-full flex-grow">
+          <div className="w-full flex-grow select-text">
             <Typing>
               {result || "\u2014"}
             </Typing>
