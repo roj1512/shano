@@ -75,7 +75,7 @@ export default function Index() {
       setButton(
         <button
           onClick={() => {
-            setResult("");
+            setResult(null);
             setButton(null);
           }}
           className="button-sm"
