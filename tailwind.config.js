@@ -10,7 +10,7 @@ module.exports = {
         ourblack: "#131313",
       },
       fontFamily: {
-        isx: "IranSansX, sans-serif",
+        vazirmatn: "Vazirmatn, sans-serif",
       },
     },
   },
