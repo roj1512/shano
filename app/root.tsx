@@ -1,4 +1,10 @@
-import { json, type MetaFunction } from "@remix-run/node";
+import Alert from "./components/Alert";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import { AlertProvider, Alert as Alert_ } from "./contexts/alert";
+import { HeaderProvider } from "./contexts/header";
+import styles from "./dist/built_main.css";
+import { type MetaFunction, json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -8,14 +14,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { useState } from "react";
 import { cleanEnv, url } from "envalid";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import { HeaderProvider } from "./contexts/header";
-import styles from "./dist/built_main.css";
-import Alert from "./components/Alert";
-import { Alert as Alert_, AlertProvider } from "./contexts/alert";
+import { useState } from "react";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -86,11 +86,7 @@ export default function App() {
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.env = ${
-              JSON.stringify(
-                data.env,
-              )
-            };`,
+            __html: `window.env = ${JSON.stringify(data.env)};`,
           }}
         />
         <Scripts />

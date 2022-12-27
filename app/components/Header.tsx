@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { SwitchTransition, Transition } from "react-transition-group";
+import { commonTransitionClasses } from "~/constants";
 import { useHeader } from "~/contexts/header";
 import Shano from "~/logos/Shano";
-import { commonTransitionClasses } from "~/constants";
 
 export default function Header() {
   const [button, setButton] = useState<JSX.Element>();
@@ -21,9 +21,7 @@ export default function Header() {
           <Transition key={text} timeout={100}>
             {(state) => (
               <div
-                className={`rounded-full font-bold items-center gap-2 text-lg flex items-center duration-100 ${
-                  commonTransitionClasses[state]
-                } `}
+                className={`rounded-full font-bold items-center gap-2 text-lg flex items-center duration-100 ${commonTransitionClasses[state]} `}
               >
                 <Shano animated={logoAnimated} /> {text ?? "شانۆ"}
               </div>
@@ -32,9 +30,7 @@ export default function Header() {
         </SwitchTransition>
         <Transition in={configuredButton != null} timeout={100}>
           {(state) => (
-            <div
-              className={`duration-100 ${commonTransitionClasses[state]}`}
-            >
+            <div className={`duration-100 ${commonTransitionClasses[state]}`}>
               {button}
             </div>
           )}

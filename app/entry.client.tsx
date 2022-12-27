@@ -7,10 +7,7 @@ addEventListener("drop", (e) => e.preventDefault());
 
 function hydrate() {
   startTransition(() => {
-    hydrateRoot(
-      document,
-      <RemixBrowser />,
-    );
+    hydrateRoot(document, <RemixBrowser />);
   });
 }
 

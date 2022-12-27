@@ -22,7 +22,7 @@ export default function Alert() {
     >
       {(state) => (
         <div
-          onClick={(e) => (e.target == e.currentTarget) && setVisible(false)}
+          onClick={(e) => e.target == e.currentTarget && setVisible(false)}
           className={`h-screen w-full bg-shano-translucent z-[1000] flex items-center justify-center p-3 duration-100 fixed ${
             {
               entering: "opacity-1",
@@ -38,9 +38,7 @@ export default function Alert() {
               onClick={() => setVisible(false)}
               className="w-8 h-8 absolute flex items-center justify-center self-end duration-100 hover:bg-[rgba(0,0,0,.05)] dark:hover:bg-[rgba(255,255,255,.05)] rounded-full cursor-pointer"
             >
-              <TbX
-                size={20}
-              />
+              <TbX size={20} />
             </div>
             <div className="items-center mx-auto gap-5 flex flex-col my-20">
               <div className="flex flex-col gap-2">
