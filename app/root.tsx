@@ -65,7 +65,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="font-vazirmatn text-ourblack dark:bg-ourblack dark:text-white select-none flex flex-col h-screen gap-1">
+      <body className="flex h-screen select-none flex-col gap-1 font-vazirmatn text-ourblack dark:bg-ourblack dark:text-white">
         <AlertProvider value={[alert, setAlert]}>
           <HeaderProvider
             value={{

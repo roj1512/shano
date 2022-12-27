@@ -23,15 +23,15 @@ const supportedMimeTypes = [
 ];
 
 export default function Index() {
-  const { setLogoAnimated, setText, setButton } = useHeader();
-  const [loading, setLoading] = useState(false);
-  const [recording, setRecording] = useState(false);
-  const [loadingText, setLoadingText] = useState<string | null>(null);
-  const [loadingNote, setLoadingNote] = useState<string | null>(null);
-  const [result, setResult] = useState<string | null>(null);
-  const [audioDeviceNotAvailable, setAudioDeviceNotAvailable] = useState(false);
-  const [recorder, setRecorder] = useState<MediaRecorder>();
   const [, setAlert] = useAlert();
+  const [audioDeviceNotAvailable, setAudioDeviceNotAvailable] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingNote, setLoadingNote] = useState<string | null>(null);
+  const [loadingText, setLoadingText] = useState<string | null>(null);
+  const [recorder, setRecorder] = useState<MediaRecorder>();
+  const [recording, setRecording] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+  const { setLogoAnimated, setText, setButton } = useHeader();
 
   async function process(file: Blob | File) {
     const ffmpeg = createFFmpeg({
@@ -113,15 +113,15 @@ export default function Index() {
         >
           {(state) => (
             <div
-              className={`w-full max-w-3xl mx-auto flex flex-col gap-2 items-center justify-center h-full duration-100 ${commonTransitionClasses[state]}`}
+              className={`mx-auto flex h-full w-full max-w-3xl flex-col items-center justify-center gap-2 duration-100 ${commonTransitionClasses[state]}`}
             >
               {loading ? (
                 <>
-                  <div className="flex gap-2 items-center justify-center text-xl">
+                  <div className="flex items-center justify-center gap-2 text-xl">
                     <FaCircleNotch size={20} className="animate-spin" />
                     {loadingText}
                   </div>
-                  <p className="opacity-50 text-sm">{loadingNote}</p>
+                  <p className="text-sm opacity-50">{loadingNote}</p>
                 </>
               ) : result != null ? (
                 <div className="w-full flex-grow select-text">
@@ -182,7 +182,7 @@ export default function Index() {
                       >
                         <FaMicrophone size={16} /> دەست بکە بە تۆمارکردن
                       </button>
-                      <div className="flex-grow w-full">
+                      <div className="w-full flex-grow">
                         <label className="button">
                           <input
                             type="file"

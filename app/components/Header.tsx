@@ -15,13 +15,13 @@ export default function Header() {
   }, [configuredButton]);
 
   return (
-    <header className="p-3 border-b-2 border-[rgba(0,0,0,.05)] dark:border-[rgba(255,255,255,.0375)]">
-      <div className="w-full max-w-3xl mx-auto flex justify-between items-center">
+    <header className="border-b-2 border-[rgba(0,0,0,.05)] p-3 dark:border-[rgba(255,255,255,.0375)]">
+      <div className="mx-auto flex w-full max-w-3xl items-center justify-between">
         <SwitchTransition>
           <Transition key={text} timeout={100}>
             {(state) => (
               <div
-                className={`rounded-full font-bold items-center gap-2 text-lg flex items-center duration-100 ${commonTransitionClasses[state]} `}
+                className={`flex items-center items-center gap-2 rounded-full text-lg font-bold duration-100 ${commonTransitionClasses[state]} `}
               >
                 <Shano animated={logoAnimated} /> {text ?? "شانۆ"}
               </div>

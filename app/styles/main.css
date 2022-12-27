@@ -20,11 +20,11 @@ html {
 }
 
 .button {
-  @apply cursor-pointer duration-100 rounded-full px-5 py-2 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] flex items-center justify-center gap-1.5;
+  @apply flex cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(0,0,0,0.07)] px-5 py-2 duration-100 dark:bg-[rgba(255,255,255,0.07)];
 }
 
 .button-sm {
-  @apply text-sm cursor-pointer duration-100 rounded-full px-5 py-1 bg-[rgba(0,0,0,0.07)] dark:bg-[rgba(255,255,255,0.07)] flex items-center justify-center gap-1.5;
+  @apply flex cursor-pointer items-center justify-center gap-1.5 rounded-full bg-[rgba(0,0,0,0.07)] px-5 py-1 text-sm duration-100 dark:bg-[rgba(255,255,255,0.07)];
 }
 
 .button:hover,

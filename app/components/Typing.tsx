@@ -23,7 +23,7 @@ export default function Typing({ children }: { children: string }) {
 
   return (
     <p
-      className="text-2xl whitespace-pre-wrap"
+      className="whitespace-pre-wrap text-2xl"
       ref={pRef}
       onClick={() => setText(children)}
     >
